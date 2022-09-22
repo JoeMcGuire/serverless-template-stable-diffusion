@@ -26,9 +26,12 @@ def inference(model_inputs:dict) -> dict:
     if prompt == None:
         return {'message': "No prompt provided"}
     
+    width = model_inputs.get('width', 512)
+    height = model_inputs.get('height', 512)
+    
     # Run the model
     with autocast("cuda"):
-        image = model(prompt)["sample"][0]
+        image = model(prompt, width, height)["sample"][0]
     
     buffered = BytesIO()
     image.save(buffered,format="JPEG")
